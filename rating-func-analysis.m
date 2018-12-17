@@ -4,7 +4,7 @@ clear
 #Function surface
 maxLikes=80;
 maxDislikes=40;
-surfDiv=2;
+surfDiv=1;
 
 
 #Level analysis
@@ -62,7 +62,7 @@ figure(3)
 s3 = contour(_num,_ratio*100,fevolution,levelN);
 xlabel 'N. of total votes';
 ylabel '% of likes';
-title("Linee di livello del rating all'aumentare del nuemro di voti");
+title("Linee di livello del rating all'aumentare del numero di voti");
 axis("square");
 c=colorbar("westoutside");
 set(c,"ylabel","Rating");
