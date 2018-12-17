@@ -1,11 +1,11 @@
 clear
 
 ###PARAMS
+cmap = "viridis";
 #Function surface
 maxLikes=80;
 maxDislikes=40;
 surfDiv=1;
-
 
 #Level analysis
 maxNum=40;
@@ -16,7 +16,13 @@ evolDiv=1;
 ###Function
 
 function rating = rank(_pos,_neg);
-  #Write function here
+  #rating = (_pos+3)./(_neg+3).*(_pos+2);
+  #--------------------------------------------#
+  neg = _neg*2;
+  n = _pos.+neg+6;
+  z = 1.51;
+  p = (_pos+3)./n;
+  rating = (p.+(z.*z)./(2.*n).-z.*sqrt((p.*(1-p).+z.*z./(4.*n))./n ))./(1.+z.*z./n);
 endfunction
 
 ##########
@@ -38,7 +44,8 @@ fsurface = rank(_likes,_dislikes);
 
 figure(1)
 
-s1 = surfc(_likes,_dislikes,fsurface);
+colormap(cmap);
+s1 = surf(_likes,_dislikes,fsurface);
 xlabel "Likes";
 ylabel "Dislikes";
 zlabel "Rating";
@@ -47,19 +54,33 @@ M = max(maxLikes,maxLikes);
 axis([0,M,0,M],"square");
 view (225,15);
 
-figure (2)
+figure(2)
 
-s2 = contour(_ratio*100,fevolution,_num,levelN);
+colormap(cmap);
+s2 = contour(_likes,_dislikes,fsurface,levelN);
+xlabel "Likes";
+ylabel "Dislikes";
+zlabel "Rating";
+title "Rating(Likes,Dislikes)"
+axis("square");
+c=colorbar("westoutside");
+set(c,"ylabel","Rating");
+
+figure (3)
+
+colormap(cmap);
+s3 = contour(_ratio*100,fevolution,_num,levelN);
 xlabel '% of likes';
 ylabel 'Rating';
 title("Evoluzione della curva del rating in funzione di like% all'aumentare dei voti totali");
-axis([0,100,0,1],"square");
+axis([0,100],"square");
 c=colorbar("westoutside");
 set(c,"ylabel","tot N. of votes");
 
-figure(3)
+figure(4)
 
-s3 = contour(_num,_ratio*100,fevolution,levelN);
+colormap(cmap);
+s4 = contour(_num,_ratio*100,fevolution,levelN);
 xlabel 'N. of total votes';
 ylabel '% of likes';
 title("Linee di livello del rating all'aumentare del numero di voti");
