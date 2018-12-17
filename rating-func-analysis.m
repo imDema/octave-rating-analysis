@@ -16,11 +16,7 @@ evolDiv=1;
 ###Function
 
 function rating = rank(_pos,_neg);
-  neg = _neg*2;
-  n = _pos.+neg+6;
-  z = 1.51;
-  p = (_pos+3)./n;
-  rating = (p.+(z.*z)./(2.*n).-z.*sqrt((p.*(1-p).+z.*z./(4.*n))./n ))./(1.+z.*z./n);
+  #Write function here
 endfunction
 
 ##########
