@@ -3,14 +3,14 @@ clear
 ###PARAMS
 cmap = "viridis";
 #Function surface
-maxLikes=80;
-maxDislikes=40;
+maxLikes=60;
+maxDislikes=25;
 surfDiv=1;
 
 #Level analysis
-maxNum=40;
+maxNum=30;
 levelN=40;
-ratioN=25;
+ratioN=50;
 evolDiv=1;
 
 ###Function
@@ -69,7 +69,8 @@ set(c,"ylabel","Rating");
 figure (3)
 
 colormap(cmap);
-s3 = contour(_ratio*100,fevolution,_num,levelN);
+[s,s3] = contourf(_ratio*100,fevolution,_num,levelN);
+set(s3,"LineColor","none");
 xlabel '% of likes';
 ylabel 'Rating';
 title("Evoluzione della curva del rating in funzione di like% all'aumentare dei voti totali");
@@ -80,7 +81,8 @@ set(c,"ylabel","tot N. of votes");
 figure(4)
 
 colormap(cmap);
-s4 = contour(_num,_ratio*100,fevolution,levelN);
+[s,s4] = contourf(_num,_ratio*100,fevolution,levelN);
+set(s4,'LineColor','none');
 xlabel 'N. of total votes';
 ylabel '% of likes';
 title("Linee di livello del rating all'aumentare del numero di voti");
