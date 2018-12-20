@@ -18,18 +18,19 @@ evolDiv=1;
 function rating = rank(_pos,_neg);
   #--------------------------------------------#
   neg = _neg;
-  n = _pos.+neg+2.4;
-  z = 0.76;
-  p = (_pos+2.2)./n;
+  n = _pos.+neg+6;
+  z = 0.56;
+  p = (_pos+3)./n;
   N=5;
-  r0=0.625;
+  r0=0.5;
   n0=_neg+_pos;
   
   #Shite
   #rating = (_pos+3)./(_neg+3);
   #Bernoulli - Wilson Interval Lower bound
   rx = (p.+(z.*z)./(2.*n).-z.*sqrt((p.*(1-p).+z.*z./(4.*n))./n ))./(1.+z.*z./n);
-  rating = rx.*n0./(n0+N) + r0.*N./(n0+N);
+  #rating = rx.*n0./(n0+N) + r0.*N./(n0+N);
+  rating = rx - (rx-r0).*2.^(-log10(n-4));
   #Bernoulli - Arcsine transformation
   #rating = sin(asin(sqrt(p))-z./(2*sqrt(n))).^2;
 endfunction
