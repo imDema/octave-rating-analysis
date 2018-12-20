@@ -4,25 +4,34 @@ clear
 cmap = "viridis";
 #Function surface
 maxLikes=60;
-maxDislikes=25;
+maxDislikes=15;
 surfDiv=1;
 
 #Level analysis
 maxNum=30;
-levelN=40;
+levelN=24;
 ratioN=50;
 evolDiv=1;
 
 ###Function
 
 function rating = rank(_pos,_neg);
-  #rating = (_pos+3)./(_neg+3).*(_pos+2);
   #--------------------------------------------#
-  neg = _neg*2;
-  n = _pos.+neg+6;
-  z = 1.51;
-  p = (_pos+3)./n;
-  rating = (p.+(z.*z)./(2.*n).-z.*sqrt((p.*(1-p).+z.*z./(4.*n))./n ))./(1.+z.*z./n);
+  neg = _neg;
+  n = _pos.+neg+2.4;
+  z = 0.76;
+  p = (_pos+2.2)./n;
+  N=5;
+  r0=0.625;
+  n0=_neg+_pos;
+  
+  #Shite
+  #rating = (_pos+3)./(_neg+3);
+  #Bernoulli - Wilson Interval Lower bound
+  rx = (p.+(z.*z)./(2.*n).-z.*sqrt((p.*(1-p).+z.*z./(4.*n))./n ))./(1.+z.*z./n);
+  rating = rx.*n0./(n0+N) + r0.*N./(n0+N);
+  #Bernoulli - Arcsine transformation
+  #rating = sin(asin(sqrt(p))-z./(2*sqrt(n))).^2;
 endfunction
 
 ##########
@@ -51,7 +60,7 @@ ylabel "Dislikes";
 zlabel "Rating";
 title "z = Rating(Likes,Dislikes)"
 M = max(maxLikes,maxLikes);
-axis([0,M,0,M],"square");
+axis([0,M,0,M,0,1],"square");
 view (225,15);
 
 figure(2)
@@ -69,12 +78,12 @@ set(c,"ylabel","Rating");
 figure (3)
 
 colormap(cmap);
-[s,s3] = contourf(_ratio*100,fevolution,_num,levelN);
-set(s3,"LineColor","none");
+[s,s3] = contour(_ratio*100,fevolution,_num,levelN);
+#¦set(s3,"LineColor","none");
 xlabel '% of likes';
 ylabel 'Rating';
 title("Evoluzione della curva del rating in funzione di like% all'aumentare dei voti totali");
-axis([0,100],"square");
+axis([0,100,0,1],"square");
 c=colorbar("westoutside");
 set(c,"ylabel","tot N. of votes");
 
